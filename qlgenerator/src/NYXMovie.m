@@ -427,13 +427,13 @@
 	struct stat st;
 	stat([_filepath UTF8String], &st);
 	NSString* fmt = nil;
-	if (st.st_size > 1073741824) // More than 1Gib
-		fmt = [[NSString alloc] initWithFormat:@"%.1fGiB", (float)((float)st.st_size / 1073741824.0f)];
-	else if ((st.st_size < 1073741824) && (st.st_size > 1048576)) // More than 1Mib
-		fmt = [[NSString alloc] initWithFormat:@"%.1fMiB", (float)((float)st.st_size / 1048576.0f)];
-	else if ((st.st_size < 1048576) && (st.st_size > 1024)) // 1Kib - 1Mib
-		fmt = [[NSString alloc] initWithFormat:@"%.2fKiB", (float)((float)st.st_size / 1024.0f)];
-	else // Less than 1Kib
+	if (st.st_size >= 1000000000) // More than 1GB
+		fmt = [[NSString alloc] initWithFormat:@"%.1fGB", (float)((float)st.st_size / 1000000000.0f)];
+	else if (st.st_size >= 1000000) // More than 1MB
+		fmt = [[NSString alloc] initWithFormat:@"%.1fMB", (float)((float)st.st_size / 1000000.0f)];
+	else if (st.st_size >= 1000) // 1KB - 1MB
+		fmt = [[NSString alloc] initWithFormat:@"%.2fKB", (float)((float)st.st_size / 1000.0f)];
+	else // Less than 1KB
 		fmt = [[NSString alloc] initWithFormat:@"%lldB", st.st_size];
 	[str_general appendFormat:@"<li><span class=\"st\">Size:</span> <span class=\"sc\">%@</span></li></ul>", fmt];
 	out_dict[@"general"] = str_general;
